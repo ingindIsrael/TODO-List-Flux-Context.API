@@ -1,42 +1,58 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
+			list: [
+				"walk the dog",
+				"take out the trash",
+				"mow the lawn"
 			]
 		},
 		actions: {
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
-			loadSomeData: () => {
-				/**
-					fetch().then().then(data => setStore({ "foo": data.bar }))
-				*/
-			},
-			changeColor: (index, color) => {
+			//This is an object and the keys are action we can 
+			//trigger from COMPONENTS inside the PROVIDER
+			addTask: (index, todo) => {
 				//get the store
 				const store = getStore();
 
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
+				//we add the new todo
+				store.list.push(todo)
+				
+				//print the list to see the change
+				console.log(store.list)
 
-				//reset the global store
-				setStore({ demo: demo });
+				return (
+					store.list
+				)
+			},
+			removeTask: (todo) => {
+				//get the store
+				const store = getStore();
+
+				// print the todo we are getting from home.js
+				console.log("removeTask todo", todo)
+
+				// logic to delete the todo 
+				// task is every element in store.list and todo is the one printed 2 lines up
+				function removeTodo(task) {
+					return task != todo
+				}
+
+				//now we use the removeTodo function inside the filter method
+				const filteredList = store.list.filter(removeTodo)
+
+				// print the filteredList
+				console.log("filteredList",filteredList)
+
+				// print the store.list no changes yet
+				console.log("store.list no changes yet",store.list)
+
+				// we update the store list
+				store.list = filteredList
+				
+				// print the store.list updated
+				console.log("store.list",store.list)
+
+				return (filteredList)
 			}
 		}
 	};
